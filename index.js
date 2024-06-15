@@ -19,13 +19,9 @@ const adventurer = {
     }
 }
 
-//Adventurer roll test
-adventurer.roll();
-adventurer.roll();
-adventurer.roll();
-
 //parts 2 & 3
 class Character {
+    static MAX_HEALTH = 100;
     constructor (name) {
       this.name = name;
       this.health = 100;
@@ -34,9 +30,14 @@ class Character {
   }
 
 class Adventurer extends Character {
+    static ROLES = ['Fighter', 'Healer','Wizard', 'Sorcerer', 'Paladin'];
     constructor (name, role) {
       super(name);
       // Adventurers have specialized roles.
+      if (!Adventurer.ROLES.includes(role)){
+        throw new Error(`Invalid role ${role}.`)
+      }
+        
       this.role = role;
       // Every adventurer starts with a bed and 50 gold coins.
       this.inventory.push("bedroll", "50 gold coins");
@@ -62,7 +63,7 @@ class Companion extends Character{
     }
 }
 
-  const robin = new Adventurer("Robin", "Adventurer");
+  const robin = new Adventurer("Robin", "Fighter");
   robin.inventory = ["sword", "potion", "artifact"];
   const leo = new Companion("Leo", "Companion");
   leo.type = "Cat";
