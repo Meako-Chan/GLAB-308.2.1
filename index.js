@@ -27,6 +27,10 @@ class Character {
       this.health = 100;
       this.inventory = [];
     }
+    roll (mod = 0) {
+        const result = Math.floor(Math.random() * 20) + 1 + mod;
+        return result;
+    }
   }
 
 class Adventurer extends Character {
@@ -47,6 +51,31 @@ class Adventurer extends Character {
       console.log(`${this.name} is scouting ahead...`);
       super.roll();
     }
+    //part 6
+    duel(adventurer){
+        console.log(`${this.name} has intitiated a duel with ${adventurer.name}!`);
+        while(this.health > 50 && adventurer.health > 50){
+            let roll1 = super.roll();
+            let roll2 = super.roll();
+            console.log(`${this.name} rolls a ${roll1}. ${adventurer.name} rolls a ${roll2}.`);
+        
+        if(roll1 > roll2) {
+            adventurer.health -= 1;
+            console.log(`${this.name} wins the round! ${adventurer.name}'s health goes down to ${adventurer.health}.`);
+        }else if (roll2 > roll1){
+            this.health -= 1;
+            console.log(`${adventurer.name} wins the round! ${this.name}'s health goes down to ${this.health}.`);
+        }else{
+            console.log("This round is a tie.")
+        }
+    }
+    if(this.health > 50) {
+        console.log(`${this.name} wins the duel! Winner winner chicken dinner!`)
+    }else{
+        console.log(`${adventurer.name} wins the duel! Winner winner chicken dinner!`)
+
+    }
+}
   }
 
 class Companion extends Character{
@@ -63,20 +92,32 @@ class Companion extends Character{
     }
 }
 
-  const robin = new Adventurer("Robin", "Fighter");
-  robin.inventory = ["sword", "potion", "artifact"];
-  const leo = new Companion("Leo", "Companion");
-  leo.type = "Cat";
-  const frank = new Companion("Frank", "Companion");
-  frank.type = "Flea";
-  frank.inventory = ["small hat", "sunglasses"];
+//part 5
+class AdventurerFactory {  
+    constructor (role) {
+      this.role = role;
+      this.adventurers = [];
+    }
+    generate (name) {
+      const newAdventurer = new Adventurer(name, this.role);
+      this.adventurers.push(newAdventurer);
+    }
+    findByIndex (index) {
+      return this.adventurers[index];
+    }
+    findByName (name) {
+      return this.adventurers.find((a) => a.name === name);
+    }
+  }
+  
+  const healers = new AdventurerFactory("Healer");
+  const fighters = new AdventurerFactory("Fighter");
+  healers.generate("Robin");
+  fighters.generate("Frank");
+  const robin = healers.findByName("Robin");
+  const frank = fighters.findByName("Frank");
+//   console.log(robin);
+//   console.log(frank);
+  robin.duel(frank);
+  
 
-  console.log(robin);
-  console.log(leo);
-  console.log(frank);
-
-//   robin.companion = new Character("Leo");
-//   robin.companion.type = "Cat";
-//   robin.companion.companion = new Character("Frank");
-//   robin.companion.companion.type = "Flea";
-//   robin.companion.companion.inventory = ["small hat", "sunglasses"];
